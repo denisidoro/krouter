@@ -8,8 +8,8 @@ A lightweight Android activity router.
 ```kotlin
 // anywhere in the app, preferably on application creation
 val krouter = Krouter(context, hashMapOf(
-    Route("user/:id/likes"), UserLikesActivity::class.java,
-    Route("settings"), SettingsActivity::class.java
+    Pair(Route("user/:id/likes"), UserLikesActivity::class.java),
+    Pair(Route("settings"), SettingsActivity::class.java)
 ))
 
 // anywhere that can access the val above
