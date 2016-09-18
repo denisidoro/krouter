@@ -7,9 +7,8 @@ A lightweight Android activity router.
 
 ```kotlin
 // anywhere in the app, preferably on application creation
-val krouter = Krouter(context, hashMapOf(
-    Pair(Route("user/:id/likes"), UserLikesActivity::class.java),
-    Pair(Route("settings"), SettingsActivity::class.java)
+val krouter = Krouter.from(context, hashMapOf(
+    "user/:id/likes" to UserLikesActivity::class.java
 ))
 
 // anywhere that can access the val above
@@ -19,51 +18,54 @@ krouter.start("user/42/likes") // this will start UserLikesActivity
 val id: Int = intent.getIntExtra("id", 0) // 42
 ```
 
-### Configuration
+### Adding more extras
 
-It is possible to establish a regular expression that the parameter must satisfy:
+In order to add more extras to the intent, one can do the following:
 ```kotlin
-Route("user/:id/likes", hashmapOf(
-    Pair("id", Schema("^[0-9]{2}$"))
-)), UserLikesActivity::class.java
+krouter.getRouter("user/42/likes")!!
+    .withIntent { it.putExtra("name", "John") }
+    .start()
 ```
 
-Currently, there are default implementations for integer and floating point numbers:
+### Starting for result
+
+In order to set a request code:
+```kotlin
+krouter.getRouter("user/42/likes")!!
+    .startForResult(activity, 123) // 123 is the request code
+```
+
+### Advanced routing configuration
+
+It is possible to instantiate Krouter establishing a regular expression that the parameter must specify:
+```kotlin
+val krouter = Krouter(context, hashMapOf(
+    Route("user/:id/likes", hashMapOf(
+        "id" to Schema("^[0-9]{2}$")
+    )) to UserLikesActivity::class.java
+)
+```
+
+There are default implementations for integer, float, double, long, char:
 ```kotlin
 // the constants must be statically imported from Schema.Type
-Route("user/:id/likes", hashmapOf(
-    Pair("id", Schema(INT))
-), UserLikesActivity::class.java)
+Route("user/:id/likes", hashMapOf(
+    "id" to Schema(INT)
+) to UserLikesActivity::class.java)
 
-Route("my/balance/:value", hashmapOf(
-    Pair("value", Schema(FLOAT))
-), BalanceActivity::class.java)
+Route("my/balance/:value", hashMapOf(
+    "value" to Schema(FLOAT)
+) to BalanceActivity::class.java)
 ```
 
 If no schema is defined, Krouter will try to infer the type accordingly.
+If no schema is suitable, the param will be coerced to a String.
 
 ### Installation
 
 Add the dependency:
 ```gradle
 dependencies {
-    compile 'com.github.denisidoro.github:krouter:0.0.1'
+    compile 'com.github.denisidoro.github:krouter:0.0.2'
 }
 ```
-
-And add the repository:
-
-```groovy
-allprojects {
-    repositories {
-        jcenter()
-        maven { url 'https://dl.bintray.com/denisidoro/maven' }
-    }
-}
-```
-
-### To do
-- [ ] Add package to jcenter so that it won't be necessary to add the repository manually
-- [ ] `startActivityForResult` implementation
-- [ ] Add helper constructors agnostic to entity definitions
-- [ ] Add schemas for Long, Double, Serializable and Parcelable
