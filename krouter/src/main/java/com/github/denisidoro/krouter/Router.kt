@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import com.github.denisidoro.krouter.Schema.Type.STRING
 
-class Router(url: String, route: Route, activityCls: Class<out Activity>, val context: Context) {
+class Router(val url: String, val route: Route, activityCls: Class<out Activity>, val context: Context) {
 
     val intent = Intent(context, activityCls)
 
@@ -36,4 +36,15 @@ class Router(url: String, route: Route, activityCls: Class<out Activity>, val co
         return Schema.Type.values()
                 .find { seg.matches(it.regex.toRegex()) } ?: STRING
     }
+
+    override fun equals(other: Any?): Boolean{
+        if (this === other) return true
+        if (other !is Router) return false
+
+        if (url != other.url) return false
+        if (route != other.route) return false
+
+        return true
+    }
+
 }

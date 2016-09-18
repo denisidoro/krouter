@@ -2,14 +2,22 @@ package com.github.denisidoro.krouter
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import com.github.denisidoro.krouter.Schema.Type.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Matchers.any
 import org.mockito.Mock
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
+import org.robolectric.RobolectricGradleTestRunner
+import org.robolectric.annotation.Config
 import java.util.*
 
+@Config(constants = BuildConfig::class, sdk = intArrayOf(21))
+@RunWith(RobolectricGradleTestRunner::class)
 class KrouterTest {
 
     @Mock
@@ -50,14 +58,16 @@ class KrouterTest {
     fun testGetRouter() {
         givenSimpleKrouter()
 
-        krouter.getRouter("user/3/likes")!!.intent.let {
-            assertEquals(3, it.getIntExtra("id", 0))
-        }
+        val url = "user/3/likes"
+        assertEquals(Router(url, routes[0], Activity::class.java, context), krouter.getRouter(url)!!)
     }
 
     @Test
     fun testStart() {
+        givenSimpleKrouter()
 
+        krouter.start("user/3/likes")
+        verify(context).startActivity(any(Intent::class.java))
     }
 
     @Test
@@ -116,18 +126,15 @@ class KrouterTest {
         }
     }
 
-    private fun givenSimpleKrouter() {
+    private fun givenSimpleKrouter() = givenKrouter(routes)
+
+    private fun givenAdvancedKrouter() = givenKrouter(routes2)
+
+    private fun givenKrouter(routes: Array<Route>) {
         val routeMap = HashMap<Route, Class<out Activity>>()
         routes.forEach { routeMap.put(it, Activity::class.java) }
         krouter = Krouter(context, routeMap)
     }
-
-    private fun givenAdvancedKrouter() {
-        val routeMap = HashMap<Route, Class<out Activity>>()
-        routes2.forEach { routeMap.put(it, Activity::class.java) }
-        krouter = Krouter(context, routeMap)
-    }
-
 
     private fun assertMatches(expected: Boolean, r: Route, s: String) {
         assertEquals(expected, krouter.matchesSchema(s, r))
