@@ -34,4 +34,12 @@ class Krouter(val context: Context, val routes: Map<Route, Class<out Activity>> 
 
     private fun split(s: String): Array<String> = s.split('/').toTypedArray()
 
+    companion object {
+        fun from(context: Context, routes: Map<String, Class<out Activity>>): Krouter {
+            val r = HashMap<Route, Class<out Activity>>()
+            routes.forEach { r.put(Route(it.key), it.value) }
+            return Krouter(context, r)
+        }
+    }
+
 }

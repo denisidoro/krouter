@@ -10,4 +10,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.github.denisidoro.sample.UserActivity">
 
+    <TextView
+        android:id="@+id/helloTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Hello user"/>
+
 </RelativeLayout>

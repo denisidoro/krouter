@@ -5,7 +5,6 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import com.github.denisidoro.krouter.Krouter
-import com.github.denisidoro.krouter.Route
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,15 +12,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val krouter = Krouter(this, hashMapOf(
-                Pair(Route("user"), UserActivity::class.java)
+        val krouter = Krouter.from(this, hashMapOf(
+                "user/:id" to UserActivity::class.java,
+                "main" to MainActivity::class.java
         ))
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
         val fab = findViewById(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener { krouter.start("user") }
+        fab.setOnClickListener { krouter.start("user/42") }
     }
 
 }

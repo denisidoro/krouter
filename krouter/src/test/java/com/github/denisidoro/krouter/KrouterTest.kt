@@ -59,7 +59,7 @@ class KrouterTest {
         givenSimpleKrouter()
 
         val url = "user/3/likes"
-        assertEquals(Router(url, routes[0], Activity::class.java, context), krouter.getRouter(url)!!)
+        assertEquals(3, krouter.getRouter(url)!!.intent.getIntExtra("id", 3))
     }
 
     @Test

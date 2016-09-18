@@ -3,11 +3,13 @@ package com.github.denisidoro.krouter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.github.denisidoro.krouter.Schema.Type.STRING
+import com.github.denisidoro.krouter.Schema.Type.*
 
-class Router(val url: String, val route: Route, activityCls: Class<out Activity>, val context: Context) {
+class Router(url: String, route: Route, activityCls: Class<out Activity>, val context: Context) {
 
     val intent = Intent(context, activityCls)
+    //lateinit var activityRef: WeakReference<Activity>
+    //var requestCode: Int? = null
 
     init {
         putExtras(url, route)
@@ -17,17 +19,32 @@ class Router(val url: String, val route: Route, activityCls: Class<out Activity>
         context.startActivity(intent)
     }
 
+    fun startForResult(activity: Activity, requestCode: Int) {
+        activity.startActivityForResult(intent, requestCode)
+    }
+
+    fun withIntent(f: (Intent) -> Unit): Router {
+        f(intent)
+        return this
+    }
+
+    //fun withActivity(activity: Activity) {
+    //    this.activityRef = WeakReference(activity)
+    //}
+
     internal fun putExtras(url: String, route: Route) {
         url.split('/').toTypedArray()
                 .zip(route.url.split('/').toTypedArray())
                 .filter { it.second.startsWith(':') }
-                .map { Pair(it.first, it.second.substring(1)) }
                 .forEach {
-                    val regex = route.schemas[it.second]?.regex?.let { Schema.Type.from(it) } ?: inferRegex(it.first)
+                    val param = it.second.substring(1)
+                    val regex = route.schemas[param]?.regex?.let { Schema.Type.from(it) } ?: inferRegex(it.first)
                     when (regex) {
-                        Schema.Type.INT -> intent.putExtra(it.second, it.first.toInt())
-                        Schema.Type.FLOAT -> intent.putExtra(it.second, it.first.toFloat())
-                        else -> intent.putExtra(it.second, it.first.toString())
+                        INT -> intent.putExtra(param, it.first.toInt())
+                        FLOAT -> intent.putExtra(param, (if (it.first.last() == 'f') removeLastChar(it.first) else it.first).toFloat())
+                        DOUBLE -> intent.putExtra(param, removeLastChar(it.first).toDouble())
+                        LONG -> intent.putExtra(param, removeLastChar(it.first).toLong())
+                        else -> if (it.first.length == 1) intent.putExtra(param, it.first[0]) else intent.putExtra(param, it.first)
                     }
                 }
     }
@@ -37,14 +54,6 @@ class Router(val url: String, val route: Route, activityCls: Class<out Activity>
                 .find { seg.matches(it.regex.toRegex()) } ?: STRING
     }
 
-    override fun equals(other: Any?): Boolean{
-        if (this === other) return true
-        if (other !is Router) return false
-
-        if (url != other.url) return false
-        if (route != other.route) return false
-
-        return true
-    }
+    private fun removeLastChar(str: String): String = str.substring(0, str.length - 1)
 
 }
