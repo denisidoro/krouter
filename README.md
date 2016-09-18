@@ -49,13 +49,8 @@ val krouter = Krouter(context, hashMapOf(
 There are default implementations for integer, float, double, long, char:
 ```kotlin
 // the constants must be statically imported from Schema.Type
-Route("user/:id/likes", hashMapOf(
-    "id" to Schema(INT)
-) to UserLikesActivity::class.java)
-
-Route("my/balance/:value", hashMapOf(
-    "value" to Schema(FLOAT)
-) to BalanceActivity::class.java)
+Route("user/:id/likes", hashMapOf("id" to Schema(INT)))
+Route("my/balance/:value", hashMapOf("value" to Schema(FLOAT)))
 ```
 
 If no schema is defined, Krouter will try to infer the type accordingly.
@@ -73,4 +68,4 @@ dependencies {
 ### Best practices
 
 - **Use dependency injection**: Krouter was idealized to be used in conjunction with Dagger.
-- **Compose routers**: say you have an activity flow in your app that's only accessible for users who are admin, for instance. If you don't want to deal with a huge routing map that has routes *all* flows, then create multiple Krouter instances. `val globalKrouter` and `@AdminScope val adminKrouter`, for example.
+- **Compose routers**: say you have an activity flow in your app that's only accessible to users who are admin, for instance. If you don't want to deal with a huge routing map that has routes *all* flows, then create multiple Krouter instances. `val globalKrouter` and `@AdminScope val adminKrouter`, for example.
