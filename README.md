@@ -1,13 +1,15 @@
 # Krouter
 A lightweight Android activity router.
 
+![crossroads](https://cloud.githubusercontent.com/assets/3226564/18612759/e81f369c-7d38-11e6-9a3d-b9da6fdc6944.png)
+
 ### Basic usage
 
 ```kotlin
 // anywhere in the app, preferably on application creation
 val krouter = Krouter(context, hashMapOf(
-    Route("user/:id/likes"), UserLikesActivity::class.java,
-    Route("settings"), SettingsActivity::class.java
+    Pair(Route("user/:id/likes"), UserLikesActivity::class.java),
+    Pair(Route("settings"), SettingsActivity::class.java)
 ))
 
 // anywhere that can access the val above
@@ -19,7 +21,7 @@ val id: Int = intent.getIntExtra("id", 0) // 42
 
 ### Configuration
 
-It is possible to establish a regular expression that the parameter must specify:
+It is possible to establish a regular expression that the parameter must satisfy:
 ```kotlin
 Route("user/:id/likes", hashmapOf(
     Pair("id", Schema("^[0-9]{2}$"))
