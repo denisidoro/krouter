@@ -1,6 +1,15 @@
 package com.github.denisidoro.krouter
 
-/*
+import android.app.Activity
+import android.content.Context
+import com.github.denisidoro.krouter.Schema.Type.*
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import java.util.*
+
 class KrouterTest {
 
     @Mock
@@ -21,7 +30,7 @@ class KrouterTest {
 
     @Before
     fun before() {
-        initMocks(this)
+        MockitoAnnotations.initMocks(this)
     }
 
     @Test
@@ -124,4 +133,3 @@ class KrouterTest {
         assertEquals(expected, krouter.matchesSchema(s, r))
     }
 }
-*/
