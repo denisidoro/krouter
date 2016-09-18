@@ -69,3 +69,8 @@ dependencies {
     compile 'com.github.denisidoro.github:krouter:0.0.2'
 }
 ```
+
+### Best practices
+
+- **Use dependency injection**: Krouter was idealized to be used in conjunction with Dagger.
+- **Compose routers**: say you have an activity flow in your app that's only accessible for users who are admin, for instance. If you don't want to deal with a huge routing map that has routes *all* flows, then create multiple Krouter instances. `val globalKrouter` and `@AdminScope val adminKrouter`, for example.
