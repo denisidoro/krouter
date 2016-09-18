@@ -69,19 +69,3 @@ dependencies {
     compile 'com.github.denisidoro.github:krouter:0.0.2'
 }
 ```
-
-And add the repository:
-
-```groovy
-allprojects {
-    repositories {
-        jcenter()
-        maven { url 'https://dl.bintray.com/denisidoro/maven' }
-    }
-}
-```
-
-### To do
-- [ ] Add package to jcenter so that it won't be necessary to add the repository manually
-- [x] `startActivityForResult` implementation
-- [x] Add helper constructors agnostic to implementation details

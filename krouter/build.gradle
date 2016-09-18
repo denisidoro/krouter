@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/denisidoro/krouter'
     gitUrl = 'https://github.com/denisidoro/krouter.git'
 
-    libraryVersion = '0.0.1'
+    libraryVersion = '0.0.2'
 
     developerId = 'denisidoro'
     developerName = 'Denis Isidoro'
