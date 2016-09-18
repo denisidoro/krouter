@@ -1,5 +1,5 @@
 # Krouter
-A lightweight Android activity router.
+A lightweight Android activity router written in Kotlin.
 
 ![crossroads](https://cloud.githubusercontent.com/assets/3226564/18612759/e81f369c-7d38-11e6-9a3d-b9da6fdc6944.png)
 
