@@ -14,7 +14,8 @@ class MainActivity : AppCompatActivity() {
 
         val krouter = Krouter.from(this, hashMapOf(
                 "user/:id" to UserActivity::class.java,
-                "main" to MainActivity::class.java
+                "main" to MainActivity::class.java,
+                "fragment" to FragmentMain::class.java
         ))
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
@@ -22,6 +23,19 @@ class MainActivity : AppCompatActivity() {
 
         val fab = findViewById(R.id.fab) as FloatingActionButton
         fab.setOnClickListener { krouter.start("user/42") }
+
+
+        val f = krouter.getRouter("fragment")!!
+                .withBundle {
+                    it.putInt("id", 18)
+                    it.putString("name", "Shadow")
+                }
+                .fragment()
+
+
+        supportFragmentManager.beginTransaction()
+                .add(R.id.container, f)
+                .commit()
     }
 
 }
