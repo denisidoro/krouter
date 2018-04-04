@@ -31,7 +31,7 @@ class Router(url: String, route: Route, val activityCls: Class<out Any>, val con
             fragment.arguments = bundle
             return fragment
         }catch (e: Exception) {
-            throw Exception(("%d is not a android.support.v4.app.Fragment, ${e.message}").format(activityCls))
+            throw Exception(("$activityCls is not a android.support.v4.app.Fragment, Exception: ${e.message}"))
         }
     }
 
