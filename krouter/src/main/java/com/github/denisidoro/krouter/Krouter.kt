@@ -1,12 +1,14 @@
 package com.github.denisidoro.krouter
 
-import android.app.Activity
 import android.content.Context
+import android.support.v4.app.Fragment
 import java.util.*
 
-class Krouter(val context: Context, val routes: Map<Route, Class<out Activity>> = HashMap()) {
+class Krouter(val context: Context, val routes: Map<Route, Class<out Any>> = HashMap()) {
 
     fun start(url: String) = getRouter(url)!!.let { it.start() }
+
+    fun fragment(url: String): Fragment? = getRouter(url)!!.let{ it.fragment() }
 
     fun getRouter(url: String) = find(url)?.let { Router(url, it, routes[it]!!, context) }
 
@@ -35,8 +37,14 @@ class Krouter(val context: Context, val routes: Map<Route, Class<out Activity>> 
     private fun split(s: String): Array<String> = s.split('/').toTypedArray()
 
     companion object {
-        fun from(context: Context, routes: Map<String, Class<out Activity>>): Krouter {
+        /*fun from(context: Context, routes: Map<String, Class<out Activity>>): Krouter {
             val r = HashMap<Route, Class<out Activity>>()
+            routes.forEach { r.put(Route(it.key), it.value) }
+            return Krouter(context, r)
+        }*/
+
+        fun from(context: Context, routes: Map<String, Class<out Any>>): Krouter {
+            val r = HashMap<Route, Class<out Any>>()
             routes.forEach { r.put(Route(it.key), it.value) }
             return Krouter(context, r)
         }
