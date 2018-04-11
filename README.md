@@ -56,6 +56,28 @@ Route("my/balance/:value", hashMapOf("value" to Schema(FLOAT)))
 If no schema is defined, Krouter will try to infer the type accordingly.
 If no schema is suitable, the param will be coerced to a String.
 
+### Interceptor
+You can add some interceptors to Krouter:
+
+```Kotlin
+// If you are not logged in, go to login
+krouter.addInterceptor(object : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Router? {
+
+        val route = chain.request()
+        if(route?.url == "user/:id" && !login) {
+            val target = chain.proceed(route)
+            val router = krouter.getRouter("login")
+            router?.intent?.putExtra("nav", target?.url)
+            router?.update()
+            return router
+        }
+        return chain.proceed(route)
+    }
+
+})
+```
+
 ### Installation
 
 Add the dependency:

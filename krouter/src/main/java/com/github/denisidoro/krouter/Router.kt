@@ -7,7 +7,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.github.denisidoro.krouter.Schema.Type.*
 
-class Router(url: String, route: Route, val activityCls: Class<out Any>, val context: Context) {
+class Router(val url: String, val route: Route?,
+             var activityCls: Class<out Any>?, var context: Context?,
+             var state: Int = 200) {
+
 
     val intent by lazy { Intent(context, activityCls) }
     //lateinit var activityRef: WeakReference<Activity>
@@ -22,12 +25,12 @@ class Router(url: String, route: Route, val activityCls: Class<out Any>, val con
     }
 
     fun start() {
-        context.startActivity(intent)
+        context?.startActivity(intent)
     }
 
     fun fragment(): Fragment {
         try{
-            val fragment = activityCls.newInstance() as Fragment
+            val fragment = activityCls?.newInstance() as Fragment
             fragment.arguments = bundle
             return fragment
         }catch (e: Exception) {
@@ -54,7 +57,8 @@ class Router(url: String, route: Route, val activityCls: Class<out Any>, val con
     //    this.activityRef = WeakReference(activity)
     //}
 
-    internal fun putExtras(url: String, route: Route) {
+    internal fun putExtras(url: String, route: Route?) {
+        if(route == null) return
         url.split('/').toTypedArray()
                 .zip(route.url.split('/').toTypedArray())
                 .filter { it.second.startsWith(':') }
@@ -89,5 +93,10 @@ class Router(url: String, route: Route, val activityCls: Class<out Any>, val con
     private fun removeLastChar(str: String): String = str.substring(0, str.length - 1)
 
     private fun isFragment() = Fragment::class.java.isAssignableFrom(activityCls)
+
+    fun update() {
+        intent.setClass(context, activityCls)
+        putExtras(url, route)
+    }
 
 }
