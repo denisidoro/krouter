@@ -15,4 +15,22 @@
         android:text="Params"/>
 
 
+    <Button android:id="@+id/btnNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txvTitle"
+        android:layout_marginTop="16dp"
+        android:textAllCaps="false"
+        android:text="Nav: test"/>
+
+
+    <Button android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnNav"
+        android:layout_marginTop="16dp"
+        android:textAllCaps="false"
+        android:text="Go Login"/>
+
+
 </RelativeLayout>

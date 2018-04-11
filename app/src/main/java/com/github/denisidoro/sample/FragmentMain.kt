@@ -24,5 +24,17 @@ class FragmentMain: Fragment() {
         val tv = view?.findViewById(R.id.txvTitle) as TextView
         tv.text = "${tv.text}{id: ${arguments["id"]}, name: ${arguments["name"]}}"
 
+
+
+        view?.findViewById(R.id.btnNav).setOnClickListener {
+            app.krouter.start("test")
+        }
+
+
+        view?.findViewById(R.id.btnLogin).setOnClickListener {
+            app.krouter.start("login")
+        }
     }
+
+
 }
