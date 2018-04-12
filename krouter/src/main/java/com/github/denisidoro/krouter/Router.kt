@@ -9,7 +9,7 @@ import com.github.denisidoro.krouter.Schema.Type.*
 
 class Router(val url: String, val route: Route?,
              var activityCls: Class<out Any>?, var context: Context?,
-             var state: Int = 200) {
+             var state: Int = Krouter.SUCCESS) {
 
 
     val intent by lazy { Intent(context, activityCls) }
