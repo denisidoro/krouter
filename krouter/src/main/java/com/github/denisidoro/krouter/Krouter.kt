@@ -19,16 +19,9 @@ class Krouter(val context: Context, val routes: Map<Route, Class<out Any>> = Has
     internal fun find(url: String): Route? = routes.keys.find { matchesSchema(url, it) }
 
     fun getRouter(url: String): Router?{
-        var router: Router?
-        var route = find(url)
-        if(route == null) {
-            route = Route(url)
-            router = Router(url, route, routes[route], context, NOT_FOUNT)
-        } else {
-            router = Router(url, route, routes[route], context)
-        }
-        val chain = InterceptorChain(intercepters, 0, route, router)
-        return chain.proceed(route)
+        var route = find(url)?:Route(url)
+        var router = Router(url, route, routes[route], context, if(routes[route] != null) SUCCESS else NOT_FOUNT)
+        return InterceptorChain(intercepters, 0, route, router).proceed(route)
     }
 
     internal fun matchesSchema(url: String, route: Route): Boolean {
@@ -59,7 +52,8 @@ class Krouter(val context: Context, val routes: Map<Route, Class<out Any>> = Has
             routes.forEach { r.put(Route(it.key), it.value) }
             return Krouter(context, r)
         }*/
-        val NOT_FOUNT = 404
+        const val SUCCESS = 200
+        const val NOT_FOUNT = 404
 
 
         fun from(context: Context, routes: Map<String, Class<out Any>>): Krouter {
