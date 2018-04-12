@@ -24,11 +24,14 @@ class MainActivity : AppCompatActivity() {
                     it.putString("name", "Shadow")
                 }
                 .fragment()
+        if(supportFragmentManager.findFragmentByTag("fragment") == null) {
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.container, f, "fragment")
+                    .commit()
+        }
 
-        supportFragmentManager.beginTransaction()
-                .add(R.id.container, f)
-                .commit()
 
     }
+
 
 }

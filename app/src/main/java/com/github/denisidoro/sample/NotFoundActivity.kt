@@ -15,6 +15,6 @@ class NotFoundActivity : AppCompatActivity() {
         (findViewById(R.id.txvTip) as TextView).text = "URL: $text is not specified, redirect to a page "
 
         val webView = findViewById(R.id.webView) as WebView
-        webView.loadUrl("https://github.com/sunxd/krouter")
+        webView.loadUrl("https://github.com/denisidoro/krouter")
     }
 }
